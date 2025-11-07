@@ -1,0 +1,101 @@
+* { box-sizing: border-box; }
+:root{
+  --bg: #f6f7fb;
+  --fg: #1f2430;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --secondary: #10b981;
+  --warn: #f59e0b;
+  --bad: #ef4444;
+  --good: #22c55e;
+  --card: #ffffff;
+  --chip: #eef2ff;
+  --drop: #e0f2fe;
+  --skin: #FCEA2B; /* OpenMoji naha toon ligikaudu */
+}
+
+/* Kalibreerimisparameetrid OpenMoji 1F467 jaoks */
+:root{
+  --mouth-top: 105px;      /* vertikaalne asukoht (väiksem = kõrgem) */
+  --mouth-left: 85px;     /* vasak nihe (ligikaudu pea keskpunkt - pool suu laiusest) */
+  --mouth-width: 32px;    /* suu laius px */
+  --vomit-top: 62px;      /* oksenduse animatsiooni algus y */
+  --vomit-left: 100px;    /* oksenduse animatsiooni algus x (pea kesk) */
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg); color: var(--fg);
+  display: grid; grid-template-rows: auto 1fr auto;
+}
+.app-header, .app-footer{ background: var(--card); border-bottom: 1px solid #e5e7eb; }
+.app-header{ display:flex; align-items:center; justify-content:space-between; padding: 12px 16px; position: sticky; top:0; z-index: 5; }
+.app-footer{ padding: 8px 16px; border-top: 1px solid #e5e7eb; color: var(--muted); }
+
+button{ border:0; padding:10px 14px; border-radius:10px; cursor:pointer; background:#e5e7eb; color:var(--fg); font-weight:600; }
+button.primary{ background: var(--primary); color: white; }
+button.secondary{ background: var(--secondary); color: white; }
+button:disabled{ opacity: 0.6; cursor: not-allowed; }
+
+#game{ display:grid; grid-template-columns: 1.4fr 1fr 0.8fr; gap:16px; padding:16px; align-items:start; }
+
+.catalog{ background: var(--card); border:1px solid #e5e7eb; border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:12px; }
+.filters{ display:flex; flex-wrap: wrap; gap:8px; align-items:center; }
+#search{ flex:1; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; }
+.chips{ display:flex; gap:8px; flex-wrap: wrap; }
+.chips .chip{ background: var(--chip); border-radius:999px; padding:6px 10px; cursor:pointer; font-size:14px; }
+.chips .chip.active{ outline: 2px solid var(--primary); }
+.items{ display:grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap:10px; }
+.item{ background: #fafafa; border:1px solid #e5e7eb; border-radius:12px; padding:8px; display:flex; flex-direction:column; gap:6px; transition: transform .1s ease; }
+.item:hover{ transform: translateY(-2px); }
+.item h4{ margin:0; font-size:14px; }
+.item .meta{ color: var(--muted); font-size:12px; }
+.item button{ align-self:flex-start; }
+.item .tag{ font-size:11px; background:#f1f5f9; padding:2px 6px; border-radius:6px; margin-right:4px; }
+
+.lunchbox{ background: var(--card); border:1px solid #e5e7eb; border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:10px; }
+.dropzone{ min-height:220px; background: linear-gradient(145deg, #f8fafc, #eef2f7); border:2px dashed #cbd5e1; border-radius:12px; padding:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap:8px; }
+.dropzone.dragover{ background: var(--drop); border-color: var(--primary); }
+.box-item{ background:white; border:1px solid #e5e7eb; border-radius:10px; padding:8px; position:relative; }
+.box-item:hover{ outline:2px solid #dbeafe; }
+.box-item .remove{ position:absolute; top:6px; right:6px; border-radius:999px; width:24px; height:24px; display:grid; place-items:center; background:#fee2e2; color:#991b1b; font-weight:900; }
+
+.score{ border-top:1px dashed #e5e7eb; padding-top:8px; }
+.score.hidden{ display:none; }
+.score .row{ display:flex; justify-content:space-between; padding:4px 0; }
+.score .total{ font-weight:800; }
+
+.controls{ display:flex; gap:8px; }
+.hint{ color: var(--muted); margin:0; }
+
+.girl{ background: var(--card); border:1px solid #e5e7eb; border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:12px; }
+.face{ width:100%; display:grid; place-items:center; position:relative; }
+.avatar{ width:200px; height:200px; position:relative; }
+#girlImg{ display:none; }
+.mouth-mask, .mouth-overlay{ display:none !important; }
+
+/* Oksendamise efekt SVG koordinaadis (suukeskme ligikaudne asukoht 36,39) */
+.vomit{ position:absolute; top: 112px; left: 100px; transform: translate(-50%, -50%); font-size: 26px; pointer-events: none; opacity: 0; }
+.vomit .spray{ display:inline-block; }
+.vomit.show{ animation: puke 900ms ease-out forwards; }
+@keyframes puke{
+  0%{ transform: translate(-50%, -50%) translateY(0) scale(0.9); opacity: 0; }
+  20%{ opacity: 1; }
+  100%{ transform: translate(-50%, -50%) translateY(36px) scale(1.05) rotate(6deg); opacity: 0; }
+}
+
+.mood{ display:flex; flex-direction:column; gap:6px; }
+.mood .bar{ width:100%; height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; }
+.mood .fill{ height:100%; width:40%; background:linear-gradient(90deg, var(--bad), var(--good)); transition: width .25s ease; }
+
+.feed.hidden{ display:none; }
+.current-item{ min-height:48px; display:flex; align-items:center; gap:8px; }
+
+/* Suu variandid: kuva ainult aktiivne */
+.mouth-shape{ display: none; }
+.mouth-shape.active{ display: inline; }
+
+@media (max-width: 1024px){
+  #game{ grid-template-columns: 1fr; }
+}

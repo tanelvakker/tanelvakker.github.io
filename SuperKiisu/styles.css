@@ -50,3 +50,60 @@ canvas {
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+
+.touch-controls {
+  position: fixed;
+  inset: auto 0 1.5rem;
+  display: none;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 1.5rem;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.touch-group {
+  display: flex;
+  gap: 1rem;
+  pointer-events: auto;
+}
+
+.touch-btn {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 50%;
+  border: 3px solid #1b1b1b;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1b1b1b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+}
+
+.touch-btn:active {
+  background: rgba(221, 221, 221, 0.85);
+}
+
+.touch-btn.jump {
+  width: 4.4rem;
+  height: 4.4rem;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 7rem;
+  }
+
+  .touch-controls {
+    display: flex;
+  }
+
+  .controls {
+    text-align: center;
+    font-size: 0.85rem;
+  }
+}

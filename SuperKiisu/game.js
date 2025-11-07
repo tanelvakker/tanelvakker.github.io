@@ -488,35 +488,96 @@ function loop() {
 }
 
 function setupInput() {
+  const setControlState = (control, value) => {
+    if (control === "left") {
+      keyState.left = value;
+    } else if (control === "right") {
+      keyState.right = value;
+    } else if (control === "jump") {
+      keyState.jump = value;
+    }
+  };
+
   const handleDown = (event) => {
     if (event.code === "ArrowLeft" || event.code === "KeyA") {
-      keyState.left = true;
+      setControlState("left", true);
       event.preventDefault();
     }
     if (event.code === "ArrowRight" || event.code === "KeyD") {
-      keyState.right = true;
+      setControlState("right", true);
       event.preventDefault();
     }
     if (event.code === "Space" || event.code === "ArrowUp" || event.code === "KeyW") {
-      keyState.jump = true;
+      setControlState("jump", true);
       event.preventDefault();
     }
   };
 
   const handleUp = (event) => {
     if (event.code === "ArrowLeft" || event.code === "KeyA") {
-      keyState.left = false;
+      setControlState("left", false);
     }
     if (event.code === "ArrowRight" || event.code === "KeyD") {
-      keyState.right = false;
+      setControlState("right", false);
     }
     if (event.code === "Space" || event.code === "ArrowUp" || event.code === "KeyW") {
-      keyState.jump = false;
+      setControlState("jump", false);
     }
   };
 
-  window.addEventListener("keydown", handleDown);
+  window.addEventListener("keydown", handleDown, { passive: false });
   window.addEventListener("keyup", handleUp);
+
+  const buttons = document.querySelectorAll("[data-control]");
+  buttons.forEach((button) => {
+    const control = button.dataset.control;
+    const activePointers = new Set();
+
+    const updateState = () => {
+      setControlState(control, activePointers.size > 0);
+    };
+
+    const handlePointerDown = (event) => {
+      event.preventDefault();
+      activePointers.add(event.pointerId);
+      if (button.setPointerCapture) {
+        button.setPointerCapture(event.pointerId);
+      }
+      updateState();
+    };
+
+    const handlePointerUp = (event) => {
+      event.preventDefault();
+      activePointers.delete(event.pointerId);
+      updateState();
+      if (button.releasePointerCapture) {
+        try {
+          button.releasePointerCapture(event.pointerId);
+        } catch (error) {
+          /* Pointer capture might already be released; ignore. */
+        }
+      }
+    };
+
+    const handlePointerCancel = (event) => {
+      activePointers.clear();
+      updateState();
+      if (button.releasePointerCapture) {
+        try {
+          button.releasePointerCapture(event.pointerId);
+        } catch (error) {
+          /* Pointer capture might already be released; ignore. */
+        }
+      }
+    };
+
+    button.addEventListener("pointerdown", handlePointerDown);
+    button.addEventListener("pointerup", handlePointerUp);
+    button.addEventListener("pointercancel", handlePointerCancel);
+    button.addEventListener("lostpointercapture", handlePointerCancel);
+    button.addEventListener("pointerleave", handlePointerUp);
+    button.addEventListener("pointerout", handlePointerUp);
+  });
 }
 
 buildLevel();

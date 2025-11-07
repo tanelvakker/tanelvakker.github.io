@@ -14,7 +14,16 @@
   </div>
   <canvas id="game" width="960" height="540">Sinu brauser ei toeta kanvaasit.</canvas>
   <div class="controls">
-    <p>Juhtimine: vasak/parem nool liikumiseks, tühik hüppamiseks.</p>
+    <p>Juhtimine: vasak/parem nool või ekraaninupud liikumiseks, tühik või ekraaninupp hüppamiseks.</p>
+  </div>
+  <div class="touch-controls" aria-label="Puutejuhtnupud">
+    <div class="touch-group">
+      <button class="touch-btn" type="button" data-control="left" aria-label="Liigu vasakule">&lt;</button>
+      <button class="touch-btn" type="button" data-control="right" aria-label="Liigu paremale">&gt;</button>
+    </div>
+    <div class="touch-group">
+      <button class="touch-btn jump" type="button" data-control="jump" aria-label="Hüppa">^</button>
+    </div>
   </div>
   <script src="game.js" defer></script>
 </body>
